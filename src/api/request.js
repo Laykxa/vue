@@ -3,6 +3,7 @@ import config from '@/config'
 import { ElMessage } from "element-plus";
 const service=axios.create({
     baseURL:config.baseApi,
+    timeout:10000,
 });
 const NETWORK_ERROR='网络错误'
 //添加请求拦截器
@@ -50,3 +51,4 @@ function request(options){
     return service(options);
 }
 export default request;
+

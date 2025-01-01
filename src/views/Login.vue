@@ -1,28 +1,31 @@
 <script setup>
-import {reactive,getCurrentInstance} from 'vue'
-import { useAllDataStore } from '../stores';
-import {useRouter} from 'vue-router'
-const loginForm=reactive({
-    username:'',
-    password:''
+import { reactive, getCurrentInstance } from 'vue'
+import { useAllDataStore } from '@/stores';
+import { useRouter } from 'vue-router'
+const loginForm = reactive({
+    username: '',
+    password: ''
 })
-const {proxy}=getCurrentInstance()
-const store=useAllDataStore()
-const router=useRouter()
-const handleLogin=async()=>{
-    const res=await proxy.$api.getMenu(loginForm)
+const { proxy } = getCurrentInstance()
+const store = useAllDataStore()
+const router = useRouter()
+const handleLogin = async () => {
+    const res = await proxy.$api.getMenu(loginForm)
     //拿到菜单以后在哪里显示
     store.updateMenuList(res.menuList)
-    store.state.token=res.token
+    store.state.token = res.token
     store.addMenu(router)
     router.push('/home')
+}
+const handleRegister=()=>{
+    router.push('/register')
 }
 </script>
 
 <template>
     <div class="body-login">
         <el-form :model="loginForm" class="login-container">
-            <h1>欢迎登录</h1>
+            <h1>用户登录</h1>
             <el-form-item>
                 <el-input type="input" placeholder="请输入账号" v-model="loginForm.username"></el-input>
             </el-form-item>
@@ -31,35 +34,53 @@ const handleLogin=async()=>{
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="handleLogin">登录</el-button>
+                <div style="margin-top: 15px;">
+                    没有账号？<span @click="handleRegister" class="to-register">去注册</span>
+                </div>
             </el-form-item>
         </el-form>
     </div>
 </template>
 
+
 <style scoped lang="less">
-.body-login{
-    width:100%;
-    height:100%;
-    background-image:url("../assets/images/background.png");
-    background-size:100%;
+.body-login {
+    width: 100%;
+    height: 100%;
+    background-image: url("@/assets/images/background.png");
+    background-size: 100%;
     overflow: hidden;
 }
 
-.login-container{
-    width:400px;
+.login-container {
+    width: 300px;
     background-color: #fff;
     border: 1px solid #eaeaea;
     border-radius: 15px;
     padding: 35px 35px 15px 35px;
     box-shadow: 0 0 25px #cacaca;
-    margin:250px auto;
-    h1{
+    margin: 250px auto;
+
+    h1 {
         text-align: center;
         margin-bottom: 20px;
-        color:#505450;
+        color: #505450;
     }
-    :deep(.el-form-item__content){
-        justify-content:center;
+
+    .el-button {
+        width: 300px;
+        height: 35px;
+    }
+    .to-register {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .to-register:hover {
+            color: #80808a;
+        }
+    :deep(.el-form-item__content) {
+        justify-content: center;
     }
 }
 </style>

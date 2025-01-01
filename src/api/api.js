@@ -10,6 +10,18 @@ export default{
             method:"get",
         })
     },
+    getAttentionData(){
+        return request({
+            url:"/user/getAttentionData",
+            method:"get",
+        })
+    },
+    getAimData(){
+        return request({
+            url:"/aim/getAimData",
+            method:"get"
+        })
+    },
     getUserData(data){
         return request({
             url:"/home/getUserData",
@@ -17,7 +29,28 @@ export default{
             data,
         })
     },
-    deleteUser(data){
+    getLoginData(){
+        return request({
+            url:"/home/getLoginData",
+            method:"get",
+            data,
+        })
+    },
+    getRegisterData(){
+        return request({
+            url:"/home/getRegisterData",
+            method:"post",
+            data,
+        })
+    },
+    getMenu(params){
+        return request({
+            url:"/permission/getMenu",
+            method:"post",
+            data:params,
+        });
+    }
+    /* deleteUser(data){
         return request({
             url:"/user/deleteUser",
             method:"get",
@@ -37,12 +70,5 @@ export default{
             method:"post",
             data,
         })
-    },
-    getMenu(params){
-        return request({
-            url:"/permission/getMenu",
-            method:"post",
-            data:params,
-        });
-    },
+    },*/
 };

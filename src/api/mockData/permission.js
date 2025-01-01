@@ -1,11 +1,11 @@
-import Mock from 'mockjs'
+import Mock from "mockjs";
 export default {
   getMenu: config => {
     const { username, password } = JSON.parse(config.body)
     // 先判断用户是否存在
     // 判断账号和密码是否对应
     //menuList用于后面做权限分配，也就是用户可以展示的菜单
-    if (username === 'admin' && password === 'admin') {
+    if (username ==='admin' && password ==='admin') {
       return {
         code: 200,
         data: {
@@ -39,11 +39,11 @@ export default {
               url: 'Search'
             },
             {
-              path: '/news',
-              name: 'news',
+              path: '/messages',
+              name: 'messages',
               label: '私信',
               icon: 'ChatLineRound',
-              url: 'News'
+              url: 'Messages'
             },
             {
               path: '/user',
@@ -53,7 +53,7 @@ export default {
               url: 'User'
             }
           ],
-          token: Mock.Random.guid(),
+          token:Mock.Random.guid(),
           message: '获取成功'
         }
       }

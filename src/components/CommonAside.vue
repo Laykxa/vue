@@ -24,7 +24,6 @@ const width=computed(()=>store.state.isCollapse ? '80px' : '180px')
 const router=useRouter()
 const route=useRoute()
 const activeMenu=computed(()=>route.path)
-//管理员和用户界面不一样
 const list=computed(()=>store.state.menuList)
 const handleMenu=(item)=>{
     router.push(item.path)

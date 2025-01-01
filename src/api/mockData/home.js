@@ -44,42 +44,15 @@ export default {
             },
           ],
         },
-        radarData: {
-          indicatorData: [
-            { name: 'Sales', max: 6500 },
-            { name: 'Administration', max: 16000 },
-            { name: 'Information Technology', max: 30000 },
-            { name: 'Customer Support', max: 38000 },
-            { name: 'Development', max: 52000 },
-            { name: 'Marketing', max: 25000 }
-          ],
-          realData:[
-            {
-              real:4200,
-              predict:5000,
-            },
-            {
-              real:3000,
-              predict:14000,
-            },
-            {
-              real:20000,
-              predict:28000,
-            },
-            {
-              real:35000,
-              predict:26000,
-            },
-            {
-              real:50000,
-              predict:42000,
-            },
-            {
-              real:18000,
-              predict:21000,
-            },
-          ]
-        }
+        videoData: [
+          { name: "周一", value: 2999 },
+          { name: "周二", value: 5999 },
+          { name: "周三", value: 1500 },
+          { name: "周四", value: 1999 },
+          { name: "周五", value: 2200 },
+          { name: "周六", value: 4500 },
+          { name: "周日", value: 3500 },
+        ],
       },
     };
   },
