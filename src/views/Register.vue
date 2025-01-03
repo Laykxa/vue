@@ -1,6 +1,34 @@
-<script>
-import   api  from '@/api/api'
-export default {
+<script setup>
+import {  reactive,getCurrentInstance} from 'vue'
+import { useAllDataStore } from '@/stores';
+import { useRouter } from 'vue-router'
+
+const registerForm = reactive({
+    username: '',
+    password: ''
+})
+const { proxy } = getCurrentInstance()
+const store = useAllDataStore()
+const router = useRouter()
+const handleRegister = async () => {
+   // const salt = generateSalt()
+   // const encryptedData = encryptPassword(registerForm.password, salt)
+    const res = await proxy.$api.getsignupData(registerForm);
+    console.log('---',res);
+    
+    if(res.code===200)
+    {
+       alert("注册成功")
+       router.push('/login')
+    }
+    else {
+      ElMessage.error(res.message || '注册失败')
+    }
+}
+const login=()=>{
+    router.push('/login')
+}
+/*export default {
     data() {
         return {
             user: {
@@ -14,6 +42,15 @@ export default {
             this.$router.push('/login');
         },
         register() {
+            const salt = generateSalt()
+            const encryptedData = encryptPassword(this.user.password, salt)
+            this.user
+                {
+                    username: this.user.username,
+                    password: encryptedData.password,
+                    salt: encryptedData.salt,
+                    timestamp: encryptedData.timestamp
+                }
             // 怎么发? 使用 axios 发
             api.getsignupData(this.user).then(res => {
                 const { data } = res;
@@ -33,20 +70,20 @@ export default {
         },
     }
 }
-
+*/
 </script>
 <template>
     <div class="body-register">
         <el-form :model="user" class="register-container">
             <h1>用户注册</h1>
             <el-form-item>
-                <el-input type="input" placeholder="请输入账号" v-model="user.username" ></el-input>
+                <el-input type="input" placeholder="请输入账号" v-model="registerForm.username" ></el-input>
             </el-form-item>
             <el-form-item>
-                <el-input type="password" placeholder="请输入密码"  v-model="user.password"></el-input>
+                <el-input type="password" placeholder="请输入密码"  v-model="registerForm.password"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="register">注册</el-button>
+                <el-button type="primary" @click="handleRegister">注册</el-button>
                 <div style="margin-top: 15px;">
                     已有账号？<span @click="login" class="to-login">去登录</span>
                 </div>

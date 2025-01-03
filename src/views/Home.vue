@@ -2,6 +2,7 @@
 import { ref, getCurrentInstance, onMounted, reactive } from "vue";
 import * as echarts from "echarts";
 import { useUserStore } from '../stores/user'
+//import {getChartData} from '../api/mockData/home'
 const userStore = useUserStore()
 const weekMap = {
   1: '周一',
@@ -80,6 +81,9 @@ const pieOptions = reactive({
 const params={
   userId:userStore.userId
 }
+const xopparams={
+  userId:userStore.userId
+}
 const getPieChartData=async()=>{
   const res = await proxy.$api.getPieData(params);
  // 处理数据
@@ -108,7 +112,7 @@ const getPieChartData=async()=>{
 }
 
 const getChartData = async () => {
-  const res = await proxy.$api.getChartData(xopparams);
+  const res = await proxy.$api.getChartData();
   console.log(res);
   xOptions.xAxis.data = res.data.date;
   xOptions.series = Object.keys(res.data[0]).map((val) => {
