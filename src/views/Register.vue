@@ -1,13 +1,12 @@
 <script>
-import { reactive } from 'vue';
-const registerForm = reactive({
-    username: '',
-    password: ''
-})
+import   api  from '@/api/api'
 export default {
     data() {
         return {
-            user: {}
+            user: {
+                username: '',
+                password: ''
+            }
         }
     },
     methods: {
@@ -16,8 +15,10 @@ export default {
         },
         register() {
             // 怎么发? 使用 axios 发
-            this.$axios.post('/user/register', this.user).then(response => {
-                const { data } = response;
+            api.getsignupData(this.user).then(res => {
+                const { data } = res;
+                console.log('===',res);
+                
                 if(data.code === 200){
                     // 注册成功
                     alert('注册成功');
@@ -25,7 +26,7 @@ export default {
                 }else{
                     alert(data.message);
                 }
-                console.log(response);
+                console.log(res);
             }).catch(error => {
                 console.log("注册请求出错了:", error);
             })
@@ -36,13 +37,13 @@ export default {
 </script>
 <template>
     <div class="body-register">
-        <el-form :model="loginForm" class="register-container">
+        <el-form :model="user" class="register-container">
             <h1>用户注册</h1>
             <el-form-item>
-                <el-input type="input" placeholder="请输入账号" ></el-input>
+                <el-input type="input" placeholder="请输入账号" v-model="user.username" ></el-input>
             </el-form-item>
             <el-form-item>
-                <el-input type="password" placeholder="请输入密码"  ></el-input>
+                <el-input type="password" placeholder="请输入密码"  v-model="user.password"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="register">注册</el-button>

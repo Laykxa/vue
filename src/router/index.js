@@ -29,9 +29,9 @@ const routes = [
                 component: () => import("@/views/Aim.vue"),
             },
             {
-                path: 'news',
-                name: "news",
-                component: () => import("@/views/News.vue"),
+                path: 'messages',
+                name: "messages",
+                component: () => import("@/views/Messages.vue"),
             },
             {
                 path:'search',

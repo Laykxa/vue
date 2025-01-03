@@ -1,12 +1,21 @@
 <script setup>
 import { ref, getCurrentInstance, onMounted, reactive } from "vue";
 import * as echarts from "echarts";
-
+import { useUserStore } from '../stores/user'
+const userStore = useUserStore()
+const weekMap = {
+  1: '周一',
+  2: '周二',
+  3: '周三',
+  4: '周四',
+  5: '周五',
+  6: '周六',
+  7: '周日'
+}
 //时间选择器配置
 const value1 = ref("");
 const defaultTime =
-  ref < [Date, Date] > [new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 2, 1, 23, 59, 59)];
-
+  ref < [Date, Date] > [new Date(2010, 1, 1, 0, 0, 0), new Date(2026, 1, 1, 0, 0, 0)];
 const { proxy } = getCurrentInstance();
 const observer = ref(null);
 //这个是折线图的公共配置
@@ -68,41 +77,74 @@ const pieOptions = reactive({
   ],
   series: [],
 });
-const getChartData = async () => {
-  const { orderData, videoData } = await proxy.$api.getChartData();
-  xOptions.xAxis.data = orderData.date;
-  xOptions.series = Object.keys(orderData.data[0]).map((val) => {
-    return {
-      name: val,
-      data: orderData.data.map((item) => item[val]),
-      type: "line",
-    };
-  });
-  const oneEchart = echarts.init(proxy.$refs["echart"]);
-  oneEchart.setOption(xOptions);
-
-  //饼状图渲染
+const params={
+  userId:userStore.userId
+}
+const getPieChartData=async()=>{
+  const res = await proxy.$api.getPieData(params);
+ // 处理数据
+ const chartData = Object.entries(res.data).map(([key, value]) => ({
+    name: weekMap[key] || `周${key}`,
+      value: value.electricityRecord?.electricityConsumed || 0
+    }))
   pieOptions.series = [
     {
-      data: videoData,
+      data: chartData,
       type: "pie",
       radius: ["0", "60%"],
     },
   ];
   const twoEchart = echarts.init(proxy.$refs["videoEchart"]);
   twoEchart.setOption(pieOptions);
-
   //监听页面变化
   observer.value = new ResizeObserver(() => {
-    oneEchart.resize();
+   
     twoEchart.resize();
   });
   //容器存在
   if (proxy.$refs["echart"]) {
     observer.value.observe(proxy.$refs["echart"]);
   }
+}
+
+const getChartData = async () => {
+  const res = await proxy.$api.getChartData(xopparams);
+  console.log(res);
+  xOptions.xAxis.data = res.data.date;
+  xOptions.series = Object.keys(res.data[0]).map((val) => {
+    return {
+      name: val,
+      data: res.data.map((item) => item[val]),
+      type: "line",
+    };
+  });
+  const oneEchart = echarts.init(proxy.$refs["echart"]);
+  oneEchart.setOption(xOptions);
+
+  //监听页面变化
+  observer.value = new ResizeObserver(() => {
+    oneEchart.resize();
+    
+  });
+  //容器存在
+  if (proxy.$refs["echart"]) {
+    observer.value.observe(proxy.$refs["echart"]);
+  }
 };
+const week=()=>{
+
+}
+const month=()=>{
+
+}
+const section=()=>{
+
+}
+const year=()=>{
+
+}
 onMounted(() => {
+  getPieChartData();
   getChartData();
 });
 </script>
@@ -116,10 +158,10 @@ onMounted(() => {
           </el-button>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>本周</el-dropdown-item>
-              <el-dropdown-item>本月</el-dropdown-item>
-              <el-dropdown-item>本季度</el-dropdown-item>
-              <el-dropdown-item>本年</el-dropdown-item>
+              <el-dropdown-item @click="week">按周</el-dropdown-item>
+              <el-dropdown-item @click="month">按月</el-dropdown-item>
+              <el-dropdown-item @click="section">按季度</el-dropdown-item>
+              <el-dropdown-item @click="year">按年</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -130,6 +172,8 @@ onMounted(() => {
           start-placeholder="开始时间"
           end-placeholder="结束时间"
           :default-time="defaultTime"
+          value-format="YYYY-MM-DD"
+          @change="handleDateChange"
         />
         <div ref="echart" style="height: 240px"></div>
       </el-card>

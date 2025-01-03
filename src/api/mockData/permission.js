@@ -1,11 +1,6 @@
 import Mock from "mockjs";
-export default {
-  getMenu: config => {
-    const { username, password } = JSON.parse(config.body)
+export function getMenu (){
     // 先判断用户是否存在
-    // 判断账号和密码是否对应
-    //menuList用于后面做权限分配，也就是用户可以展示的菜单
-    if (username ==='admin' && password ==='admin') {
       return {
         code: 200,
         data: {
@@ -57,15 +52,6 @@ export default {
           message: '获取成功'
         }
       }
-    } else {
-      return {
-        code: -999,
-        data: {
-          message: '密码错误'
-        },
-      };
-        
-    }
+    
 
-  },
-};
+  }

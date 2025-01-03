@@ -1,7 +1,11 @@
 <script setup>
-import { reactive, getCurrentInstance } from 'vue'
+import { reactive, getCurrentInstance,ref } from 'vue'
 import { useAllDataStore } from '@/stores';
 import { useRouter } from 'vue-router'
+import {getMenu} from '../api/mockData/permission'
+import { useUserStore } from '../stores/user'
+const userStore = useUserStore()
+
 const loginForm = reactive({
     username: '',
     password: ''
@@ -9,17 +13,36 @@ const loginForm = reactive({
 const { proxy } = getCurrentInstance()
 const store = useAllDataStore()
 const router = useRouter()
+/*const getLoginData=async()=>{
+    response=await proxy.$api.getLoginData(loginForm);
+}*/
 const handleLogin = async () => {
-    const res = await proxy.$api.getMenu(loginForm)
-    //拿到菜单以后在哪里显示
-    store.updateMenuList(res.menuList)
-    store.state.token = res.token
+    const res = await proxy.$api.getLoginData(loginForm);
+    //router.push('/home');
+    console.log('---',res);
+    
+    if(res.code===200)
+    {
+        const menuData = await getMenu();
+    //console.log(menuData);
+     //拿到菜单以后在哪里显示
+     store.updateMenuList(menuData.data.menuList)
+    store.state.token = menuData.data.token
     store.addMenu(router)
+    userStore.setUserId(res.data.id)
     router.push('/home')
+    }
+    else {
+      ElMessage.error(res.message || '登录失败')
+    }
 }
 const handleRegister=()=>{
     router.push('/register')
 }
+/*onMounted(()=>{
+    getLoginData();
+})*/
+
 </script>
 
 <template>

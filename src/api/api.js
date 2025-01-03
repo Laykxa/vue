@@ -4,10 +4,24 @@ import request from "./request";
 //请求数据
 
 export default{
-    getChartData(){
+    getPieData(params){
         return request({
-            url:"/home/getChartData",
+            url:"/electricity-record/querybydayofweek",
             method:"get",
+            params:{
+                userId:params.userId
+            }
+        })
+    },
+    getChartData(params){
+        return request({
+            url:"/electricity-record/querybyrange",
+            method:"get",
+            params:{
+                startDate:params.startDate,
+                endDate:params.endDate,
+                userId:params.userId
+            }
         })
     },
     getAttentionData(){
@@ -29,27 +43,20 @@ export default{
             data,
         })
     },
-    getLoginData(){
+    getLoginData(data){
         return request({
-            url:"/home/getLoginData",
-            method:"get",
-            data,
-        })
-    },
-    getRegisterData(){
-        return request({
-            url:"/home/getRegisterData",
+            url:"/login/",
             method:"post",
             data,
         })
     },
-    getMenu(params){
+    getsignupData(data){
         return request({
-            url:"/permission/getMenu",
+            url:"/sign-up/",
             method:"post",
-            data:params,
-        });
-    }
+            data
+        })
+    },
     /* deleteUser(data){
         return request({
             url:"/user/deleteUser",
